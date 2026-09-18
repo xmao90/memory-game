@@ -3,395 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>记忆翻翻乐 - 幼儿记忆训练</title>
+    <title>记忆翻翻乐 - TOB指标训练</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #FF6B9D;
-            --secondary: #4ECDC4;
-            --accent: #FFE66D;
+            --pink: #FF6B9D;
+            --teal: #4ECDC4;
+            --yellow: #FFE66D;
             --purple: #A06CD5;
             --blue: #74B9FF;
             --orange: #FF9F43;
             --green: #26DE81;
-            --bg: #FFF5F8;
-            --card-bg: #FFFFFF;
+            --red: #FF4757;
+            --bg: #F0F4FF;
             --text: #2D3436;
-            --text-light: #636E72;
+            --muted: #636E72;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: var(--bg);
             min-height: 100vh;
-            overflow-x: hidden;
         }
-        .page { display: none; min-height: 100vh; padding: 20px; }
-        .page.active { display: flex; flex-direction: column; align-items: center; }
+        .page { display: none; min-height: 100vh; }
+        .page.active { display: flex; flex-direction: column; }
+
+        /* ===== 首页 ===== */
+        #home {
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            gap: 30px;
+            background: linear-gradient(135deg, #E8F0FF 0%, #FCE4EC 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        #home::before {
+            content: '📊🏆💡🎯📈🔧📦🚚📋✅📸🎓⚡📋🔔';
+            position: absolute; font-size: 30px; opacity: 0.15;
+            white-space: nowrap; top: 20px; left: 0; right: 0;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100vw); }
+        }
+        .home-title {
+            text-align: center;
+            position: relative; z-index: 1;
+        }
+        .home-title h1 {
+            font-size: 36px;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .home-title p { color: var(--muted); font-size: 14px; }
+        .home-emoji { font-size: 70px; display: block; margin: 15px 0; }
         
-        /* 装饰背景 */
-        .bg-deco { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; overflow: hidden; }
-        .bg-deco::before {
-            content: '🌟⭐✨🌙🌸🎈🎀🎪🦋';
-            position: absolute; font-size: 40px; opacity: 0.3;
-            animation: float 6s ease-in-out infinite;
+        .name-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            width: 100%; max-width: 360px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            position: relative; z-index: 1;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
+        .name-card h3 {
+            text-align: center; margin-bottom: 20px;
+            color: var(--purple); font-size: 16px;
+        }
+        .name-card input {
+            width: 100%; padding: 16px 20px;
+            font-size: 18px; border: 2.5px solid #E0E7FF;
+            border-radius: 16px; text-align: center;
+            outline: none; transition: border-color 0.3s;
+            background: #FAFBFF;
+        }
+        .name-card input:focus { border-color: var(--blue); }
+        
+        .mode-selector { margin: 20px 0; }
+        .mode-selector label {
+            display: block; font-size: 14px; color: var(--muted);
+            margin-bottom: 12px; text-align: center;
+        }
+        .mode-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .mode-btn {
+            padding: 10px 20px; border: 2px solid #E0E7FF;
+            border-radius: 30px; background: white;
+            font-size: 14px; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .mode-btn.active {
+            background: var(--purple); color: white; border-color: var(--purple);
         }
         
-        /* 通用按钮 */
+        .error-msg { color: var(--red); font-size: 13px; text-align: center; min-height: 20px; margin-top: 8px; }
+        
         .btn {
-            padding: 16px 40px;
-            font-size: 18px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
+            display: block; width: 100%; padding: 16px;
+            font-size: 18px; border: none; border-radius: 50px;
+            cursor: pointer; font-weight: bold;
             transition: all 0.3s;
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
         }
+        .btn-pink { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
+        .btn-teal { background: linear-gradient(135deg, var(--teal), var(--blue)); color: white; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .btn:active { transform: translateY(0); }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--purple)); color: white; }
-        .btn-secondary { background: linear-gradient(135deg, var(--secondary), var(--blue)); color: white; }
-        .btn-small { padding: 10px 24px; font-size: 14px; min-width: auto; }
         
-        /* ===== 首页 ===== */
-        #page-home { justify-content: center; gap: 30px; }
-        .logo-area { text-align: center; }
-        .logo-area h1 { font-size: 42px; color: var(--primary); margin-bottom: 10px; }
-        .logo-area .emoji { font-size: 80px; display: block; margin-bottom: 15px; }
-        .logo-area p { color: var(--text-light); font-size: 16px; }
-        
-        .input-area { width: 100%; max-width: 320px; }
-        .input-area input {
-            width: 100%; padding: 18px 24px;
-            font-size: 20px; border: 3px solid var(--primary);
-            border-radius: 20px; text-align: center;
-            outline: none; background: white;
-            transition: border-color 0.3s;
+        .home-stats {
+            background: white; border-radius: 20px; padding: 20px;
+            width: 100%; max-width: 360px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            position: relative; z-index: 1;
         }
-        .input-area input:focus { border-color: var(--purple); }
-        .input-area input::placeholder { color: #ccc; }
-        
-        .checkbox-area { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
-        .checkbox-area input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--primary); }
-        .checkbox-area label { color: var(--text-light); font-size: 14px; }
-        
-        .error-msg { color: #ff4757; font-size: 14px; margin-top: 10px; text-align: center; min-height: 20px; }
-        
-        /* ===== 游戏选择页 ===== */
-        #page-select { justify-content: center; gap: 25px; padding-top: 40px; }
-        #page-select h2 { font-size: 28px; color: var(--text); margin-bottom: 10px; }
-        #page-select .username-display { font-size: 16px; color: var(--purple); margin-bottom: 20px; }
-        
-        .game-cards { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 360px; }
-        .game-card {
-            background: white; border-radius: 24px; padding: 24px;
-            display: flex; align-items: center; gap: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            cursor: pointer; transition: all 0.3s;
-            border: 3px solid transparent;
-        }
-        .game-card:hover { transform: translateX(10px); border-color: var(--secondary); }
-        .game-card .icon { font-size: 50px; }
-        .game-card .info h3 { font-size: 20px; color: var(--text); margin-bottom: 5px; }
-        .game-card .info p { font-size: 13px; color: var(--text-light); }
-        .game-card:nth-child(1) { border-left: 5px solid var(--primary); }
-        .game-card:nth-child(2) { border-left: 5px solid var(--secondary); }
-        .game-card:nth-child(3) { border-left: 5px solid var(--orange); }
-        
+        .home-stats h4 { font-size: 14px; color: var(--muted); margin-bottom: 12px; text-align: center; }
+        .stat-row { display: flex; justify-content: space-around; }
+        .stat-item { text-align: center; }
+        .stat-item .num { font-size: 24px; font-weight: bold; color: var(--purple); }
+        .stat-item .txt { font-size: 11px; color: var(--muted); }
+
         /* ===== 游戏页 ===== */
-        #page-game { padding-top: 15px; gap: 15px; }
-        .game-header {
-            width: 100%; display: flex; justify-content: space-between;
-            align-items: center; padding: 10px 0;
+        #game {
+            padding: 15px;
+            gap: 10px;
         }
-        .game-info { display: flex; gap: 20px; flex-wrap: wrap; }
-        .info-badge {
-            background: white; padding: 8px 16px; border-radius: 20px;
-            font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        .game-top {
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 8px;
         }
-        .info-badge span { color: var(--text-light); margin-right: 5px; }
-        .info-badge strong { color: var(--purple); }
-        
         .back-btn {
             background: white; border: none; padding: 8px 16px;
             border-radius: 20px; cursor: pointer; font-size: 14px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
+        .game-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+        .badge {
+            background: white; padding: 6px 14px; border-radius: 20px;
+            font-size: 13px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+        .badge span { color: var(--muted); }
+        .badge strong { color: var(--purple); }
+
+        .game-layout {
+            flex: 1; display: flex; flex-direction: column; gap: 15px;
+        }
+        .cards-layout {
+            flex: 1;
+            display: flex;
+            gap: 15px;
+            align-items: stretch;
+        }
+        .col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .col-header {
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 12px;
+        }
+        .col-name .col-header { background: rgba(160,108,213,0.15); color: var(--purple); }
+        .col-pct .col-header { background: rgba(78,205,196,0.15); color: var(--teal); }
         
-        .game-area {
-            flex: 1; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            width: 100%;
-        }
-        
-        /* 翻牌配对 */
-        .flip-cards {
-            display: grid;
-            gap: 12px;
-            justify-content: center;
-        }
-        .flip-cards.cols-2 { grid-template-columns: repeat(2, 1fr); }
-        .flip-cards.cols-3 { grid-template-columns: repeat(3, 1fr); }
-        .flip-cards.cols-4 { grid-template-columns: repeat(4, 1fr); }
-        
-        .flip-card {
-            width: 80px; height: 100px;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-        .flip-card-inner {
-            width: 100%; height: 100%;
-            transition: transform 0.5s;
-            transform-style: preserve-3d;
-        }
-        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-face {
-            position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden;
+        .match-card {
+            flex: 1;
             border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 40px;
-        }
-        .flip-card-back {
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            box-shadow: 0 6px 20px rgba(255,107,157,0.3);
-        }
-        .flip-card-front {
-            background: white;
-            transform: rotateY(180deg);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-            font-size: 36px;
-        }
-        .flip-card.matched .flip-card-front { background: #e8f5e9; }
-        .flip-card.wrong .flip-card-inner { animation: shake 0.4s; }
-        @keyframes shake {
-            0%,100%{transform:rotateY(180deg) translateX(0)}
-            25%{transform:rotateY(180deg) translateX(-8px)}
-            75%{transform:rotateY(180deg) translateX(8px)}
-        }
-        
-        /* 序列灯光记忆 */
-        .light-board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-        .light-btn {
-            width: 90px; height: 90px;
-            border-radius: 20px;
-            background: #ddd;
-            border: none;
+            font-size: 13px; font-weight: bold;
+            padding: 8px;
+            text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 40px;
-        }
-        .light-btn.active {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px currentColor;
-        }
-        .light-btn.btn-0 { color: #ff6b6b; }
-        .light-btn.btn-1 { color: #feca57; }
-        .light-btn.btn-2 { color: #48dbfb; }
-        .light-btn.btn-3 { color: #1dd1a1; }
-        .light-btn.btn-4 { color: #a55eea; }
-        .light-btn.btn-5 { color: #ff9ff3; }
-        .light-btn.btn-6 { color: #54a0ff; }
-        .light-btn.btn-7 { color: #5f27cd; }
-        .light-btn.btn-8 { color: #00d2d3; }
-        
-        /* 物品速记 */
-        .item-grid {
-            display: grid;
-            gap: 15px;
-            justify-content: center;
-        }
-        .item-card {
-            width: 100px; height: 100px;
-            background: white; border-radius: 20px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 50px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
             transition: all 0.3s;
+            min-height: 56px;
+            word-break: break-word;
+            line-height: 1.3;
+            position: relative;
+            border: 3px solid transparent;
         }
-        .item-card.hidden { opacity: 0; transform: scale(0.5); pointer-events: none; }
-        .item-card.selected { border: 4px solid var(--primary); transform: scale(1.05); }
-        .item-card.correct { border: 4px solid var(--green); background: #e8f5e9; }
-        .item-card.wrong { border: 4px solid #ff4757; background: #ffeaeb; }
+        .col-name .match-card {
+            background: white;
+            box-shadow: 0 4px 15px rgba(160,108,213,0.1);
+            color: var(--text);
+            border-color: rgba(160,108,213,0.2);
+        }
+        .col-pct .match-card {
+            background: white;
+            box-shadow: 0 4px 15px rgba(78,205,196,0.1);
+            color: var(--teal);
+            border-color: rgba(78,205,196,0.2);
+        }
+        .match-card:hover { transform: scale(1.03); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .match-card.selected { transform: scale(1.05); }
+        .col-name .match-card.selected { border-color: var(--purple); background: rgba(160,108,213,0.1); }
+        .col-pct .match-card.selected { border-color: var(--teal); background: rgba(78,205,196,0.1); }
+        .match-card.matched {
+            opacity: 0.4; cursor: default; transform: none !important;
+        }
+        .match-card.wrong { animation: shake 0.4s; border-color: var(--red) !important; }
+        .match-card.correct { animation: pop 0.4s; border-color: var(--green) !important; background: rgba(38,222,129,0.1) !important; }
         
-        /* 游戏状态 */
-        .game-status {
-            text-align: center; margin-top: 20px;
+        @keyframes shake {
+            0%,100%{transform:translateX(0)}
+            25%{transform:translateX(-6px)}
+            75%{transform:translateX(6px)}
         }
-        .game-status h3 { font-size: 24px; color: var(--purple); margin-bottom: 10px; }
-        .game-status p { color: var(--text-light); }
-        .progress-ring {
-            width: 150px; height: 150px;
-            margin: 20px auto;
+        @keyframes pop {
+            0%{transform:scale(1)}
+            50%{transform:scale(1.15)}
+            100%{transform:scale(1)}
         }
-        .progress-ring circle { fill: none; stroke-width: 8; }
-        .progress-ring .bg { stroke: #eee; }
-        .progress-ring .fg { stroke: var(--primary); stroke-linecap: round; transform: rotate(-90deg); transform-origin: center; }
-        .countdown-text { font-size: 48px; font-weight: bold; color: var(--primary); }
         
+        .col-name .match-card.correct { background: rgba(38,222,129,0.08) !important; border-color: var(--green) !important; color: var(--green); }
+        .col-pct .match-card.correct { background: rgba(38,222,129,0.08) !important; border-color: var(--green) !important; color: var(--green); }
+        
+        .game-tip {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 16px;
+            font-size: 14px;
+            color: var(--muted);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .game-tip strong { color: var(--purple); }
+        
+        .game-controls {
+            display: flex; gap: 10px;
+        }
+        .game-controls .btn { padding: 12px; font-size: 15px; }
+
         /* ===== 结算页 ===== */
-        #page-result { justify-content: center; gap: 25px; padding-top: 30px; }
-        .result-title { font-size: 36px; text-align: center; }
-        .result-title.win { color: var(--primary); }
-        .result-title.fail { color: var(--text-light); }
+        #result {
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            gap: 20px;
+            background: linear-gradient(135deg, #E8F0FF 0%, #FCE4EC 100%);
+        }
+        .result-title { font-size: 32px; text-align: center; }
+        .result-title.win { color: var(--pink); }
+        .result-title.fail { color: var(--muted); }
         
         .result-card {
-            background: white; border-radius: 24px; padding: 30px;
-            width: 100%; max-width: 360px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: white; border-radius: 24px; padding: 25px;
+            width: 100%; max-width: 380px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
         }
-        .result-card h3 { font-size: 18px; color: var(--text-light); margin-bottom: 20px; text-align: center; }
-        .result-stats { display: grid; gap: 15px; }
+        .result-card h3 { text-align: center; color: var(--muted); font-size: 15px; margin-bottom: 18px; }
+        .result-stats { display: grid; gap: 12px; }
         .result-stat {
             display: flex; justify-content: space-between;
-            padding: 12px 15px; background: var(--bg); border-radius: 12px;
+            padding: 10px 14px; background: var(--bg); border-radius: 12px;
         }
-        .result-stat .label { color: var(--text-light); }
-        .result-stat .value { font-weight: bold; color: var(--purple); font-size: 18px; }
+        .result-stat .label { color: var(--muted); font-size: 14px; }
+        .result-stat .value { font-weight: bold; color: var(--purple); font-size: 16px; }
         
-        .result-actions { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
-        
-        /* 排行榜 */
-        .leaderboard { width: 100%; max-width: 400px; }
-        .leaderboard h3 { font-size: 20px; text-align: center; margin-bottom: 15px; color: var(--text); }
-        .lb-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
-        .lb-tab {
-            padding: 8px 20px; border: none; border-radius: 20px;
-            background: #eee; cursor: pointer; font-size: 14px;
-            transition: all 0.3s;
-        }
-        .lb-tab.active { background: var(--primary); color: white; }
-        .lb-list { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-        .lb-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px 16px; border-bottom: 1px solid #f0f0f0;
-        }
+        .leaderboard { width: 100%; max-width: 380px; }
+        .leaderboard h3 { font-size: 18px; text-align: center; margin-bottom: 12px; color: var(--text); }
+        .lb-tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; }
+        .lb-tab { padding: 7px 18px; border: none; border-radius: 20px; background: #eee; cursor: pointer; font-size: 13px; }
+        .lb-tab.active { background: var(--pink); color: white; }
+        .lb-list { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
+        .lb-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f5f5f5; }
         .lb-item:last-child { border-bottom: none; }
-        .lb-rank { font-size: 18px; font-weight: bold; width: 30px; text-align: center; }
+        .lb-rank { width: 28px; text-align: center; font-weight: bold; font-size: 16px; }
         .lb-rank.gold { color: #f1c40f; }
         .lb-rank.silver { color: #bdc3c7; }
         .lb-rank.bronze { color: #cd7f32; }
-        .lb-name { flex: 1; font-size: 16px; color: var(--text); }
-        .lb-score { font-size: 14px; color: var(--purple); }
-        .lb-time { font-size: 12px; color: var(--text-light); }
+        .lb-name { flex: 1; font-size: 15px; color: var(--text); }
+        .lb-score { font-size: 13px; color: var(--purple); font-weight: bold; }
+        .lb-time { font-size: 11px; color: var(--muted); }
+        
+        .result-btns { display: flex; gap: 12px; width: 100%; max-width: 380px; }
+        .result-btns .btn { flex: 1; padding: 14px; font-size: 15px; }
         
         /* Toast */
         .toast {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(0,0,0,0.8); color: white;
-            padding: 12px 24px; border-radius: 30px;
+            background: rgba(0,0,0,0.75); color: white;
+            padding: 10px 24px; border-radius: 30px;
             font-size: 14px; z-index: 1000;
             animation: toastIn 0.3s ease;
         }
-        @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-15px); } }
         
         /* 彩蛋 */
-        .confetti {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 999;
-        }
-        .confetti-piece {
-            position: absolute; width: 10px; height: 10px;
-            animation: fall linear forwards;
-        }
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
+        .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+        .confetti-piece { position: absolute; width: 10px; height: 10px; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+        /* 进度条 */
+        .progress-bar { width: 100%; height: 6px; background: #E0E7FF; border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--pink), var(--purple)); transition: width 0.3s; border-radius: 3px; }
+        .progress-wrap { background: white; border-radius: 16px; padding: 14px 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 响应式 */
-        @media (max-width: 400px) {
-            .flip-card { width: 70px; height: 88px; }
-            .light-btn { width: 75px; height: 75px; }
-            .item-card { width: 80px; height: 80px; font-size: 40px; }
+        @media (max-width: 480px) {
+            .match-card { font-size: 12px; min-height: 50px; padding: 6px; }
         }
     </style>
 </head>
 <body>
 
-<!-- ===== 首页：姓名录入 ===== -->
-<div id="page-home" class="page active">
-    <div class="bg-deco"></div>
-    <div class="logo-area">
-        <span class="emoji">🧠</span>
-        <h1>记忆翻翻乐</h1>
-        <p>训练你的记忆力，快来挑战吧！</p>
+<!-- 首页 -->
+<div id="home" class="page active">
+    <div class="home-title">
+        <span class="home-emoji">📊</span>
+        <h1>TOB指标记忆挑战</h1>
+        <p>将指标名称与权重百分比配对，训练你的考核记忆！</p>
     </div>
-    <div class="input-area">
-        <input type="text" id="nameInput" placeholder="请输入你的名字" maxlength="8">
-        <div class="checkbox-area">
-            <input type="checkbox" id="anonymousCheck">
-            <label for="anonymousCheck">匿名游玩（不记录排行榜）</label>
-        </div>
+    <div class="name-card">
+        <h3>👤 请输入你的名字</h3>
+        <input type="text" id="nameInput" placeholder="名字（最多8字）" maxlength="8">
         <div class="error-msg" id="nameError"></div>
-    </div>
-    <button class="btn btn-primary" onclick="goToSelect()">🎮 开始游戏</button>
-</div>
-
-<!-- ===== 游戏选择页 ===== -->
-<div id="page-select" class="page">
-    <h2>选择游戏</h2>
-    <div class="username-display">欢迎，<span id="displayName"></span>！</div>
-    <div class="game-cards">
-        <div class="game-card" onclick="startGame('flip')">
-            <div class="icon">🃏</div>
-            <div class="info">
-                <h3>翻牌配对</h3>
-                <p>翻开两张卡牌，找出相同的图案</p>
+        <div class="mode-selector">
+            <label>选择挑战难度</label>
+            <div class="mode-btns">
+                <button class="mode-btn active" data-mode="4" onclick="selectMode(4)">4对</button>
+                <button class="mode-btn" data-mode="6" onclick="selectMode(6)">6对</button>
+                <button class="mode-btn" data-mode="9" onclick="selectMode(9)">9对</button>
+                <button class="mode-btn" data-mode="all" onclick="selectMode('all')">全部</button>
             </div>
         </div>
-        <div class="game-card" onclick="startGame('light')">
-            <div class="icon">💡</div>
-            <div class="info">
-                <h3>序列灯光记忆</h3>
-                <p>记住灯光闪烁的顺序并复现</p>
-            </div>
-        </div>
-        <div class="game-card" onclick="startGame('item')">
-            <div class="icon">🎯</div>
-            <div class="info">
-                <h3>物品速记</h3>
-                <p>记住显示的物品，消失后点击选中</p>
-            </div>
+        <button class="btn btn-pink" onclick="startGame()">🎮 开始挑战</button>
+    </div>
+    <div class="home-stats">
+        <h4>📈 历史成绩</h4>
+        <div class="stat-row">
+            <div class="stat-item"><div class="num" id="statGames">0</div><div class="txt">总场次</div></div>
+            <div class="stat-item"><div class="num" id="statBest">-</div><div class="txt">最佳用时</div></div>
+            <div class="stat-item"><div class="num" id="statAcc">0%</div><div class="txt">平均正确率</div></div>
         </div>
     </div>
-    <button class="btn btn-secondary btn-small" onclick="goHome()">返回首页</button>
 </div>
 
-<!-- ===== 游戏页 ===== -->
-<div id="page-game" class="page">
-    <div class="game-header">
-        <button class="back-btn" onclick="goToSelect()">← 返回</button>
-        <div class="game-info">
-            <div class="info-badge"><span>关卡</span><strong id="levelNum">1</strong></div>
-            <div class="info-badge"><span>用时</span><strong id="timeNum">00:00</strong></div>
-            <div class="info-badge"><span>记忆广度</span><strong id="spanNum">0</strong></div>
+<!-- 游戏页 -->
+<div id="game" class="page">
+    <div class="game-top">
+        <button class="back-btn" onclick="goHome()">← 返回</button>
+        <div class="game-badges">
+            <div class="badge"><span>⏱️</span> <strong id="timer">00:00</strong></div>
+            <div class="badge"><span>✅</span> <strong id="correctCount">0</strong>/<span id="totalCount">0</span></div>
+            <div class="badge"><span>🔄</span> <strong id="roundNum">1</strong></div>
         </div>
     </div>
-    <div class="game-area" id="gameArea"></div>
-    <div class="game-status" id="gameStatus"></div>
+    <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressBar" style="width:0%"></div></div>
+    </div>
+    <div class="game-layout">
+        <div class="cards-layout">
+            <div class="col col-name">
+                <div class="col-header">📋 指标名称</div>
+                <div id="nameCards"></div>
+            </div>
+            <div class="col col-pct">
+                <div class="col-header">💯 权重百分比</div>
+                <div id="pctCards"></div>
+            </div>
+        </div>
+        <div class="game-tip" id="gameTip">👆 点击左侧指标，再点击右侧对应百分比配对</div>
+        <div class="game-controls">
+            <button class="btn btn-teal" onclick="resetRound()">🔄 重置本轮</button>
+            <button class="btn btn-pink" onclick="giveUp()">🏳️ 放弃挑战</button>
+        </div>
+    </div>
 </div>
 
-<!-- ===== 结算页 ===== -->
-<div id="page-result" class="page">
+<!-- 结算页 -->
+<div id="result" class="page">
     <div class="result-title win" id="resultTitle">🎉 太棒了！</div>
     <div class="result-card">
         <h3>本次成绩</h3>
         <div class="result-stats">
-            <div class="result-stat"><span class="label">姓名</span><span class="value" id="resName">-</span></div>
-            <div class="result-stat"><span class="label">游戏类型</span><span class="value" id="resType">-</span></div>
-            <div class="result-stat"><span class="label">最终关卡</span><span class="value" id="resLevel">-</span></div>
-            <div class="result-stat"><span class="label">记忆广度</span><span class="value" id="resSpan">-</span></div>
-            <div class="result-stat"><span class="label">总用时</span><span class="value" id="resTime">-</span></div>
-            <div class="result-stat"><span class="label">正确率</span><span class="value" id="resAcc">-</span></div>
+            <div class="result-stat"><span class="label">姓名</span><span class="value" id="rName">-</span></div>
+            <div class="result-stat"><span class="label">配对数</span><span class="value" id="rPairs">-</span></div>
+            <div class="result-stat"><span class="label">正确率</span><span class="value" id="rAcc">-</span></div>
+            <div class="result-stat"><span class="label">总用时</span><span class="value" id="rTime">-</span></div>
+            <div class="result-stat"><span class="label">尝试次数</span><span class="value" id="rAttempts">-</span></div>
         </div>
     </div>
     <div class="leaderboard">
@@ -399,59 +391,75 @@
         <div class="lb-tabs">
             <button class="lb-tab active" onclick="switchLB('today')">今日</button>
             <button class="lb-tab" onclick="switchLB('week')">本周</button>
+            <button class="lb-tab" onclick="switchLB('all')">全部</button>
         </div>
         <div class="lb-list" id="lbList"></div>
     </div>
-    <div class="result-actions">
-        <button class="btn btn-primary" onclick="restartGame()">🔄 再来一局</button>
-        <button class="btn btn-secondary" onclick="goHome()">🏠 返回首页</button>
+    <div class="result-btns">
+        <button class="btn btn-pink" onclick="replay()">🔄 再来一局</button>
+        <button class="btn btn-teal" onclick="goHome()">🏠 返回首页</button>
     </div>
 </div>
 
 <script>
-// ===== 全局状态 =====
+// ===== 指标数据 =====
+const ALL_DATA = [
+    { name: '大件收派定损损坏', pct: '10%' },
+    { name: '循环包装使用率', pct: '5%' },
+    { name: '大件网点违规率', pct: '10%' },
+    { name: '大件20kg+子母件分离率', pct: '3%' },
+    { name: '首环节打托&建笼集装率', pct: '7%' },
+    { name: '收派车辆升级', pct: '5%' },
+    { name: '车辆配套', pct: '5%' },
+    { name: '工业区揽收模式', pct: '10%' },
+    { name: '入仓入厂', pct: '5%' },
+    { name: '夜收夜派', pct: '5%' },
+    { name: '签单返还不规范客诉', pct: '5%' },
+    { name: '签单返还前端销售审单合规率', pct: '5%' },
+    { name: '破损拦截试派', pct: '5%' },
+    { name: '收派件拍照不规范', pct: '5%' },
+    { name: '子母件到齐派送', pct: '5%' },
+    { name: '培训执行及有效性', pct: '2.5%' },
+    { name: '工单协查及时', pct: '2.5%' },
+    { name: '奖罚落地（损坏细化、违规细化）', pct: '5%' },
+];
+
+// ===== 游戏状态 =====
 const state = {
     playerName: '',
-    anonymous: false,
-    currentGame: '',
-    level: 1,
-    span: 0, // 记忆广度
-    time: 0,
-    timerInterval: null,
+    mode: 4, // 配对数量
+    data: [],
+    nameCards: [],  // 打乱的指标
+    pctCards: [],   // 打乱的百分比
+    selectedName: null,
+    selectedPct: null,
+    matched: [],
     correct: 0,
-    wrong: 0,
-    totalOps: 0,
-    streakWin: 0,
-    streakFail: 0,
-    // 翻牌
-    flipCards: [],
-    flipFlipped: [],
-    flipMatched: 0,
-    flipTotal: 0,
-    flipLocked: false,
-    // 灯光
-    lightSequence: [],
-    lightUserSequence: [],
-    lightRound: 0,
-    lightShowing: false,
-    lightLevel: 3,
-    // 物品
-    itemList: [],
-    itemTarget: 0,
-    itemSelected: [],
-    itemPhase: 'show', // show / recall
+    attempts: 0,
+    timer: 0,
+    timerInterval: null,
+    round: 1,
+    roundData: [],
 };
 
-// ===== 工具函数 =====
+// ===== 工具 =====
 function $(id) { return document.getElementById(id); }
 function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     $(id).classList.add('active');
 }
-function formatTime(s) {
+function fmt(s) {
     const m = Math.floor(s/60).toString().padStart(2,'0');
     const ss = (s%60).toString().padStart(2,'0');
     return `${m}:${ss}`;
+}
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length-1; i>0; i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
 }
 function toast(msg) {
     const t = document.createElement('div');
@@ -460,96 +468,217 @@ function toast(msg) {
     setTimeout(() => t.remove(), 2000);
 }
 function confetti() {
-    const c = document.createElement('div');
-    c.className = 'confetti';
+    const c = document.createElement('div'); c.className = 'confetti';
     const colors = ['#FF6B9D','#4ECDC4','#FFE66D','#A06CD5','#74B9FF','#FF9F43','#26DE81'];
     for (let i = 0; i < 60; i++) {
-        const p = document.createElement('div');
-        p.className = 'confetti-piece';
-        p.style.left = Math.random()*100 + '%';
-        p.style.top = '-20px';
+        const p = document.createElement('div'); p.className = 'confetti-piece';
+        p.style.left = Math.random()*100+'%'; p.style.top = '-20px';
         p.style.background = colors[Math.floor(Math.random()*colors.length)];
         p.style.borderRadius = Math.random()>0.5?'50%':'0';
-        p.style.animationDuration = (1.5 + Math.random()*2) + 's';
-        p.style.animationDelay = Math.random()*0.5 + 's';
+        p.style.animationDuration = (1.5+Math.random()*2)+'s';
+        p.style.animationDelay = Math.random()*0.5+'s';
         c.appendChild(p);
     }
     document.body.appendChild(c);
     setTimeout(() => c.remove(), 4000);
 }
 
-// ===== 页面导航 =====
-function goHome() {
-    stopTimer();
-    showPage('page-home');
-    $('nameInput').value = state.playerName;
+// ===== 首页 =====
+function selectMode(m) {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.mode-btn[data-mode="${m}"]`).classList.add('active');
+    state.mode = m;
 }
-function goToSelect() {
-    stopTimer();
-    showPage('page-select');
-    $('displayName').textContent = state.anonymous ? '小小勇士' : state.playerName;
+function loadHomeStats() {
+    const records = getRecords();
+    $('statGames').textContent = records.length;
+    if (records.length > 0) {
+        const best = Math.min(...records.map(r => r.time));
+        $('statBest').textContent = fmt(best);
+        const avgAcc = Math.round(records.reduce((s,r) => s+r.acc, 0) / records.length);
+        $('statAcc').textContent = avgAcc + '%';
+    }
 }
-function goToGame() {
-    showPage('page-game');
+function startGame() {
+    const name = $('nameInput').value.trim();
+    if (!name) { $('nameError').textContent = '请输入名字哦~'; return; }
+    $('nameError').textContent = '';
+    state.playerName = name;
+    state.round = 1;
+    state.correct = 0;
+    state.attempts = 0;
+    state.timer = 0;
+    state.matched = [];
+    state.selectedName = null;
+    state.selectedPct = null;
+    
+    // 准备数据
+    const shuffled = shuffle([...ALL_DATA]);
+    const count = state.mode === 'all' ? ALL_DATA.length : state.mode;
+    state.data = shuffled.slice(0, count);
+    state.nameCards = shuffle([...state.data]);
+    state.pctCards = shuffle([...state.data]);
+    
+    renderGame();
+    showPage('game');
+    startTimer();
+    $('roundNum').textContent = state.round;
+    $('correctCount').textContent = '0';
+    $('totalCount').textContent = count;
+    $('progressBar').style.width = '0%';
 }
-function goResult(won) {
+function renderGame() {
+    $('nameCards').innerHTML = state.nameCards.map((d,i) => `
+        <div class="match-card" data-type="name" data-index="${i}" onclick="cardClick(this,'name',${i})">
+            ${d.name}
+        </div>`).join('');
+    $('pctCards').innerHTML = state.pctCards.map((d,i) => `
+        <div class="match-card" data-type="pct" data-index="${i}" onclick="cardClick(this,'pct',${i})">
+            ${d.pct}
+        </div>`).join('');
+    $('gameTip').innerHTML = '👆 点击左侧指标，再点击右侧对应百分比配对';
+}
+function cardClick(el, type, idx) {
+    if (el.classList.contains('matched')) return;
+    
+    // 清除同类之前的选中
+    document.querySelectorAll(`.match-card[data-type="${type}"]`).forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    
+    if (type === 'name') {
+        state.selectedName = { el, idx, data: state.nameCards[idx] };
+        state.selectedPct = null;
+    } else {
+        state.selectedPct = { el, idx, data: state.pctCards[idx] };
+        // 如果左边已选，检查匹配
+        if (state.selectedName) {
+            checkMatch();
+        }
+    }
+}
+function checkMatch() {
+    state.attempts++;
+    const nameData = state.selectedName.data;
+    const pctData = state.selectedPct.data;
+    
+    if (nameData.name === pctData.name && nameData.pct === pctData.pct) {
+        // ✅ 正确
+        state.correct++;
+        state.matched.push(nameData.name);
+        state.selectedName.el.classList.remove('selected');
+        state.selectedName.el.classList.add('correct','matched');
+        state.selectedPct.el.classList.remove('selected');
+        state.selectedPct.el.classList.add('correct','matched');
+        $('correctCount').textContent = state.correct;
+        $('progressBar').style.width = (state.correct / state.data.length * 100) + '%';
+        toast('✅ 配对成功！');
+        
+        if (state.correct === state.data.length) {
+            // 全部完成
+            setTimeout(() => {
+                stopTimer();
+                saveRecord();
+                showResult(true);
+            }, 800);
+        }
+    } else {
+        // ❌ 错误
+        state.selectedName.el.classList.add('wrong');
+        state.selectedPct.el.classList.add('wrong');
+        toast('❌ 不匹配！');
+        setTimeout(() => {
+            document.querySelectorAll('.wrong').forEach(c => {
+                c.classList.remove('wrong','selected');
+            });
+        }, 600);
+    }
+    state.selectedName = null;
+    state.selectedPct = null;
+}
+function resetRound() {
+    state.selectedName = null;
+    state.selectedPct = null;
+    state.matched = [];
+    state.nameCards = shuffle([...state.data]);
+    state.pctCards = shuffle([...state.data]);
+    renderGame();
+}
+function giveUp() {
     stopTimer();
-    // 保存成绩
     saveRecord();
-    // 渲染结果
+    showResult(false);
+}
+function showResult(won) {
     $('resultTitle').textContent = won ? '🎉 太棒了！' : '💪 继续加油！';
     $('resultTitle').className = 'result-title ' + (won ? 'win' : 'fail');
-    $('resName').textContent = state.anonymous ? '小小勇士' : state.playerName;
-    $('resType').textContent = {flip:'翻牌配对', light:'序列灯光记忆', item:'物品速记'}[state.currentGame];
-    $('resLevel').textContent = state.level;
-    $('resSpan').textContent = state.span;
-    $('resTime').textContent = formatTime(state.time);
-    const acc = state.totalOps > 0 ? Math.round(state.correct/state.totalOps*100) : 0;
-    $('resAcc').textContent = acc + '%';
-    // 排行榜
+    $('rName').textContent = state.playerName;
+    $('rPairs').textContent = `${state.correct}/${state.data.length}`;
+    const acc = state.attempts > 0 ? Math.round(state.correct / state.attempts * 100) : 0;
+    $('rAcc').textContent = acc + '%';
+    $('rTime').textContent = fmt(state.timer);
+    $('rAttempts').textContent = state.attempts;
     renderLeaderboard('today');
-    showPage('page-result');
+    showPage('result');
     if (won) confetti();
+}
+function replay() {
+    state.round = 1;
+    state.correct = 0;
+    state.attempts = 0;
+    state.timer = 0;
+    state.matched = [];
+    state.selectedName = null;
+    state.selectedPct = null;
+    state.nameCards = shuffle([...state.data]);
+    state.pctCards = shuffle([...state.data]);
+    renderGame();
+    showPage('game');
+    startTimer();
+    $('roundNum').textContent = state.round;
+    $('correctCount').textContent = '0';
+    $('progressBar').style.width = '0%';
+}
+function goHome() {
+    stopTimer();
+    loadHomeStats();
+    showPage('home');
 }
 
 // ===== 计时器 =====
 function startTimer() {
-    state.time = 0;
+    state.timer = 0;
     state.timerInterval = setInterval(() => {
-        state.time++;
-        $('timeNum').textContent = formatTime(state.time);
+        state.timer++;
+        $('timer').textContent = fmt(state.timer);
     }, 1000);
 }
 function stopTimer() {
     clearInterval(state.timerInterval);
-    state.timerInterval = null;
 }
 
-// ===== 成绩存储 =====
+// ===== 记录 =====
 function getRecords() {
-    try { return JSON.parse(localStorage.getItem('memory_records') || '[]'); }
+    try { return JSON.parse(localStorage.getItem('tob_records') || '[]'); }
     catch { return []; }
 }
 function saveRecord() {
-    if (state.anonymous) return;
     const records = getRecords();
     const today = new Date().toISOString().split('T')[0];
     const weekStart = getWeekStart();
+    const acc = state.attempts > 0 ? Math.round(state.correct / state.attempts * 100) : 0;
     records.push({
         name: state.playerName,
-        game: state.currentGame,
-        span: state.span,
-        level: state.level,
-        time: state.time,
+        pairs: state.data.length,
         correct: state.correct,
-        total: state.totalOps,
+        acc,
+        time: state.timer,
+        attempts: state.attempts,
         date: today,
-        weekStart: weekStart,
+        weekStart,
         ts: Date.now()
     });
-    // 只保留最近500条
     if (records.length > 500) records.splice(0, records.length - 500);
-    localStorage.setItem('memory_records', JSON.stringify(records));
+    localStorage.setItem('tob_records', JSON.stringify(records));
 }
 function getWeekStart() {
     const d = new Date();
@@ -563,30 +692,30 @@ function renderLeaderboard(type) {
     const weekStart = getWeekStart();
     const filtered = records.filter(r => {
         if (type === 'today') return r.date === today;
-        return r.weekStart === weekStart;
+        if (type === 'week') return r.weekStart === weekStart;
+        return true;
     });
-    // 按记忆广度降序，再按时长升序
     filtered.sort((a,b) => {
-        if (b.span !== a.span) return b.span - a.span;
+        if (b.correct !== a.correct) return b.correct - a.correct;
+        if (b.acc !== a.acc) return b.acc - a.acc;
         return a.time - b.time;
     });
-    const top10 = filtered.slice(0, 10);
+    const top = filtered.slice(0, 10);
     const list = $('lbList');
-    if (top10.length === 0) {
-        list.innerHTML = '<div style="text-align:center;padding:30px;color:#999;">暂无记录，快去游戏吧！</div>';
+    if (top.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:30px;color:#999;">暂无记录，开始你的第一次挑战吧！</div>';
         return;
     }
-    list.innerHTML = top10.map((r,i) => {
-        const rankClass = i===0?'gold':i===1?'silver':i===2?'bronze':'';
-        const rankIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
-        const gameName = {flip:'翻牌',light:'灯光',item:'物品'}[r.game]||'';
+    list.innerHTML = top.map((r,i) => {
+        const rc = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+        const ri = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
         return `<div class="lb-item">
-            <div class="lb-rank ${rankClass}">${rankIcon}</div>
+            <div class="lb-rank ${rc}">${ri}</div>
             <div>
                 <div class="lb-name">${r.name}</div>
-                <div class="lb-time">${gameName} · ${formatTime(r.time)}</div>
+                <div class="lb-time">${r.pairs}对 · ${r.acc}%正确率</div>
             </div>
-            <div class="lb-score">广度${r.span}</div>
+            <div class="lb-score">${fmt(r.time)}</div>
         </div>`;
     }).join('');
 }
@@ -596,352 +725,9 @@ function switchLB(type) {
     renderLeaderboard(type);
 }
 
-// ===== 首页逻辑 =====
-function goToSelect() {
-    const name = $('nameInput').value.trim();
-    const anon = $('anonymousCheck').checked;
-    if (!anon && !name) {
-        $('nameError').textContent = '请输入名字哦~';
-        return;
-    }
-    $('nameError').textContent = '';
-    state.playerName = name || '小小勇士';
-    state.anonymous = anon;
-    $('displayName').textContent = anon ? '小小勇士' : state.playerName;
-    showPage('page-select');
-}
-
-// ===== 游戏初始化 =====
-function startGame(type) {
-    state.currentGame = type;
-    state.level = 1;
-    state.span = 0;
-    state.correct = 0;
-    state.wrong = 0;
-    state.totalOps = 0;
-    state.streakWin = 0;
-    state.streakFail = 0;
-    $('levelNum').textContent = '1';
-    $('spanNum').textContent = '0';
-    $('timeNum').textContent = '00:00';
-    goToGame();
-    startTimer();
-    
-    if (type === 'flip') initFlip();
-    else if (type === 'light') initLight();
-    else if (type === 'item') initItem();
-}
-
-// ===== 翻牌配对游戏 =====
-const FLIP_ICONS = ['🐶','🐱','🐰','🦊','🐼','🐨','🦁','🐯','🐸','🐵','🦄','🐷','🐮','🦒','🐔','🐧','🐬','🦋','🌸','⭐','🍎','🍕','🚗','✈️','🚀','🎈','🎁','🌈','🔮','🎵'];
-function initFlip() {
-    const pairCount = 2 + Math.floor((state.level-1)/2); // 初始2对
-    const count = Math.min(pairCount * 2, 12); // 最多12张
-    const icons = shuffle([...FLIP_ICONS]).slice(0, count/2);
-    state.flipCards = shuffle([...icons, ...icons]);
-    state.flipFlipped = [];
-    state.flipMatched = 0;
-    state.flipTotal = count/2;
-    state.flipLocked = false;
-    state.span = count;
-    $('spanNum').textContent = count;
-    renderFlipBoard();
-    $('gameStatus').innerHTML = '<p style="color:#aaa;font-size:14px;">请找出相同的图案</p>';
-}
-function renderFlipBoard() {
-    const cols = state.flipCards.length <= 4 ? 2 : state.flipCards.length <= 6 ? 3 : 4;
-    const area = $('gameArea');
-    area.innerHTML = `<div class="flip-cards cols-${cols}">${
-        state.flipCards.map((icon,i) => `
-        <div class="flip-card" data-index="${i}" onclick="flipCard(${i})">
-            <div class="flip-card-inner">
-                <div class="flip-card-face flip-card-back">❓</div>
-                <div class="flip-card-face flip-card-front">${icon}</div>
-            </div>
-        </div>`).join('')
-    }</div>`;
-}
-function flipCard(idx) {
-    if (state.flipLocked) return;
-    const el = document.querySelector(`.flip-card[data-index="${idx}"]`);
-    if (el.classList.contains('flipped') || el.classList.contains('matched')) return;
-    
-    el.classList.add('flipped');
-    state.flipFlipped.push(idx);
-    
-    if (state.flipFlipped.length === 2) {
-        state.totalOps++;
-        state.flipLocked = true;
-        const [a, b] = state.flipFlipped;
-        if (state.flipCards[a] === state.flipCards[b]) {
-            // 匹配
-            state.correct++;
-            setTimeout(() => {
-                document.querySelectorAll(`.flip-card[data-index="${a}"], .flip-card[data-index="${b}"]`).forEach(e => e.classList.add('matched'));
-                state.flipMatched++;
-                state.flipFlipped = [];
-                state.flipLocked = false;
-                $('gameStatus').innerHTML = `<p style="color:var(--green);font-weight:bold;">✅ 找对了！</p>`;
-                if (state.flipMatched === state.flipTotal) {
-                    // 通关
-                    state.streakWin++;
-                    state.streakFail = 0;
-                    toast(`🎉 第 ${state.level} 关通过！`);
-                    if (state.streakWin >= 2 && state.level < 6) {
-                        state.level++;
-                        $('levelNum').textContent = state.level;
-                        setTimeout(() => initFlip(), 1000);
-                    } else if (state.level >= 6) {
-                        setTimeout(() => goResult(true), 1500);
-                    } else {
-                        setTimeout(() => initFlip(), 1500);
-                    }
-                }
-            }, 400);
-        } else {
-            // 不匹配
-            state.wrong++;
-            setTimeout(() => {
-                document.querySelectorAll(`.flip-card[data-index="${a}"], .flip-card[data-index="${b}"]`).forEach(e => {
-                    e.classList.add('wrong');
-                    setTimeout(() => e.classList.remove('flipped','wrong'), 500);
-                });
-                state.flipFlipped = [];
-                state.flipLocked = false;
-                $('gameStatus').innerHTML = `<p style="color:var(--primary);font-weight:bold;">🤔 不一样，再试试！</p>`;
-                state.streakFail++;
-                state.streakWin = 0;
-                if (state.streakFail >= 2 && state.level > 1) {
-                    state.level--;
-                    $('levelNum').textContent = state.level;
-                    setTimeout(() => initFlip(), 1000);
-                }
-            }, 800);
-        }
-    }
-}
-
-// ===== 灯光记忆游戏 =====
-function initLight() {
-    state.lightLevel = 2 + state.level; // 初始3个
-    state.lightSequence = [];
-    state.lightUserSequence = [];
-    state.lightRound = 0;
-    state.lightShowing = true;
-    state.span = state.lightLevel;
-    $('spanNum').textContent = state.lightLevel;
-    
-    $('gameArea').innerHTML = `
-        <div class="light-board" id="lightBoard">
-            ${[0,1,2,3,4,5,6,7,8].map(i => `
-            <button class="light-btn btn-${i}" data-id="${i}" onclick="lightClick(${i})">○</button>`).join('')}
-        </div>`;
-    $('gameStatus').innerHTML = '<p style="color:#aaa;font-size:14px;">观看灯光顺序...</p>';
-    
-    // 生成序列
-    for (let i = 0; i < state.lightLevel; i++) {
-        state.lightSequence.push(Math.floor(Math.random() * 9));
-    }
-    // 播放序列
-    playSequence();
-}
-async function playSequence() {
-    state.lightShowing = true;
-    $('gameStatus').innerHTML = '<p style="color:#aaa;font-size:14px;">观看灯光顺序...</p>';
-    await sleep(800);
-    for (let i = 0; i < state.lightSequence.length; i++) {
-        const id = state.lightSequence[i];
-        const btn = document.querySelector(`.light-btn[data-id="${id}"]`);
-        btn.classList.add('active');
-        btn.textContent = '●';
-        btn.style.background = 'currentColor';
-        await sleep(600);
-        btn.classList.remove('active');
-        btn.textContent = '○';
-        btn.style.background = '#ddd';
-        await sleep(300);
-    }
-    state.lightShowing = false;
-    state.lightUserSequence = [];
-    state.lightRound = 0;
-    $('gameStatus').innerHTML = `<p style="color:var(--secondary);font-weight:bold;">轮到你了！点击重复顺序 (${state.lightLevel}个)</p>`;
-}
-function lightClick(id) {
-    if (state.lightShowing) return;
-    state.totalOps++;
-    const btn = document.querySelector(`.light-btn[data-id="${id}"]`);
-    btn.classList.add('active');
-    btn.textContent = '●';
-    btn.style.background = 'currentColor';
-    setTimeout(() => {
-        btn.classList.remove('active');
-        btn.textContent = '○';
-        btn.style.background = '#ddd';
-    }, 200);
-    
-    state.lightUserSequence.push(id);
-    const idx = state.lightUserSequence.length - 1;
-    
-    if (state.lightUserSequence[idx] !== state.lightSequence[idx]) {
-        // 错误
-        state.wrong++;
-        $('gameStatus').innerHTML = '<p style="color:var(--primary);font-weight:bold;">顺序错了！</p>';
-        state.streakFail++;
-        state.streakWin = 0;
-        setTimeout(() => {
-            if (state.streakFail >= 2 && state.level > 1) {
-                state.level--;
-                $('levelNum').textContent = state.level;
-            }
-            initLight();
-        }, 1200);
-        return;
-    }
-    
-    state.correct++;
-    if (state.lightUserSequence.length === state.lightSequence.length) {
-        // 通关
-        state.streakWin++;
-        state.streakFail = 0;
-        toast(`🎉 第 ${state.level} 关通过！`);
-        if (state.streakWin >= 2 && state.level < 6) {
-            state.level++;
-            $('levelNum').textContent = state.level;
-        }
-        if (state.level >= 6) {
-            setTimeout(() => goResult(true), 1500);
-        } else {
-            setTimeout(() => initLight(), 1500);
-        }
-    }
-}
-
-// ===== 物品速记游戏 =====
-const ITEM_ICONS = ['🍎','🍊','🍋','🍇','🍓','🍒','🥝','🍑','🍌','🥭','🌽','🥕','🌸','🌺','🌻','🍀','🌈','⭐','🌙','🔥','💎','🎁','🎈','🎨','🚗','✈️','🚀','🦋','🐶','🐱','🐰','🦊','🐼','🐨'];
-function initItem() {
-    const count = 3 + state.level - 1; // 初始3个
-    state.itemList = shuffle([...ITEM_ICONS]).slice(0, Math.min(count, 12));
-    state.itemTarget = count;
-    state.itemSelected = [];
-    state.span = count;
-    $('spanNum').textContent = count;
-    state.itemPhase = 'show';
-    
-    $('gameArea').innerHTML = `
-        <div class="item-grid" id="itemGrid" style="grid-template-columns:repeat(${Math.min(count,4)},1fr)">
-            ${state.itemList.map((icon,i) => `<div class="item-card" data-index="${i}">${icon}</div>`).join('')}
-        </div>`;
-    $('gameStatus').innerHTML = `<p style="color:#aaa;font-size:14px;">记住这些物品 (${count}秒)</p><div class="countdown-text" id="countdown">${count}</div>`;
-    
-    let t = count;
-    const timer = setInterval(() => {
-        t--;
-        const cd = $('countdown');
-        if (cd) cd.textContent = t;
-        if (t <= 0) {
-            clearInterval(timer);
-            setTimeout(() => startItemRecall(), 300);
-        }
-    }, 1000);
-}
-function startItemRecall() {
-    state.itemPhase = 'recall';
-    $('gameStatus').innerHTML = '<p style="color:var(--secondary);font-weight:bold;">选刚才看到的物品！</p>';
-    const grid = $('itemGrid');
-    grid.querySelectorAll('.item-card').forEach((card, i) => {
-        card.classList.add('hidden');
-        card.textContent = '？';
-        card.dataset.icon = state.itemList[i];
-        card.onclick = () => itemSelect(card, i);
-    });
-    // 随机显示部分
-    const showCount = Math.ceil(state.itemList.length * 0.4);
-    const indices = shuffle([...Array(state.itemList.length).keys()]).slice(0, showCount);
-    indices.forEach(i => {
-        const cards = grid.querySelectorAll('.item-card');
-        cards[i].classList.remove('hidden');
-        cards[i].textContent = state.itemList[i];
-    });
-}
-function itemSelect(card, idx) {
-    if (card.classList.contains('selected')) {
-        card.classList.remove('selected');
-        state.itemSelected = state.itemSelected.filter(i => i !== idx);
-        return;
-    }
-    if (state.itemSelected.length >= state.itemTarget) {
-        toast('已达数量上限！');
-        return;
-    }
-    card.classList.add('selected');
-    state.itemSelected.push(idx);
-    
-    if (state.itemSelected.length === state.itemTarget) {
-        // 检查
-        state.totalOps++;
-        let correct = 0;
-        state.itemSelected.forEach(i => {
-            if (card.parentElement.querySelector(`.item-card[data-index="${i}"]`)) correct++;
-        });
-        // 简单判断：正确选择数
-        const rightPicks = state.itemSelected.filter(i => {
-            const cards = document.querySelectorAll('.item-card');
-            return true; // 显示全部检查
-        }).length;
-        
-        // 显示全部
-        document.querySelectorAll('.item-card').forEach((c, i) => {
-            c.classList.remove('hidden');
-            c.textContent = state.itemList[i];
-            if (state.itemSelected.includes(i)) {
-                c.classList.add(state.itemList[i] === c.dataset.icon ? 'correct' : 'wrong');
-            }
-        });
-        
-        // 判断正确率
-        const allHidden = document.querySelectorAll('.item-card.hidden').length;
-        const selectedCount = state.itemSelected.length;
-        // 简化：正确选了就是对的
-        state.correct = selectedCount;
-        state.wrong = Math.abs(state.itemTarget - selectedCount);
-        const acc = state.correct / state.totalOps;
-        
-        if (acc >= 0.5) {
-            state.streakWin++;
-            state.streakFail = 0;
-            toast('✅ 回答正确！');
-            if (state.streakWin >= 2 && state.level < 6) {
-                state.level++;
-                $('levelNum').textContent = state.level;
-            }
-            setTimeout(() => {
-                if (state.level >= 6) goResult(true);
-                else initItem();
-            }, 1500);
-        } else {
-            state.streakFail++;
-            state.streakWin = 0;
-            $('gameStatus').innerHTML = '<p style="color:var(--primary);font-weight:bold;">再记多一点！</p>';
-            setTimeout(() => initItem(), 1500);
-        }
-    }
-}
-
-// ===== 辅助 =====
-function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length-1; i>0; i--) {
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]] = [a[j],a[i]];
-    }
-    return a;
-}
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-function restartGame() { startGame(state.currentGame); }
-
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', () => {
-    // 默认显示首页
+    loadHomeStats();
 });
 </script>
 </body>
