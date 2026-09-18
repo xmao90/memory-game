@@ -109,6 +109,7 @@
         }
         .btn-pink { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
         .btn-teal { background: linear-gradient(135deg, var(--teal), var(--blue)); color: white; }
+        .btn-yellow { background: linear-gradient(135deg, #FFE66D, #FF9F43); color: #2D3436; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         
         .home-stats {
@@ -387,6 +388,7 @@
             </div>
         </div>
         <button class="btn btn-pink" onclick="startGame()">🎮 开始挑战</button>
+        <button class="btn btn-yellow" onclick="showHomeReview()">📖 预习全部答案</button>
     </div>
     <div class="home-stats">
         <h4>📈 历史成绩</h4>
@@ -813,6 +815,20 @@ function showReview() {
             <span class="pct">${d.pct} ${icon}</span>
         </div>`;
     }).join('');
+    $('reviewModal').classList.add('show');
+}
+// ===== 首页预习答案 =====
+function showHomeReview() {
+    const list = $('reviewList');
+    list.innerHTML = ALL_DATA.map((d, i) => {
+        return `<div class="review-item">
+            <span class="idx">${i+1}</span>
+            <span class="name">${d.name}</span>
+            <span class="arrow">→</span>
+            <span class="pct">${d.pct}</span>
+        </div>`;
+    }).join('');
+    // 隐藏底部按钮（首页复习不需要再玩）
     $('reviewModal').classList.add('show');
 }
 function closeReview() {
